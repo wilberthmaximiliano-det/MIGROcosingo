@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulario Cerrado - MIGR Ocosingo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Inter',Arial;background:radial-gradient(circle at top, #1e293b 0%, #0f172a 60%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:white;width:100%;max-width:420px;border-radius:24px;padding:32px 28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4);animation:pop 0.6s ease}
+@keyframes pop{from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1}}
+.icon{width:84px;height:84px;background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:42px}
+h1{margin:0;color:#0f172a;font-size:26px;font-weight:800;letter-spacing:-0.5px}
+.badge{display:inline-block;margin-top:10px;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.5px}
+.horario{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:14px;padding:14px;margin-top:20px}
+.horario b{color:#0f172a}
+.countdown{margin-top:18px;background:#0f172a;color:white;border-radius:14px;padding:14px}
+.countdown small{display:block;color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.countdown div{font-size:20px;font-weight:800;letter-spacing:0.5px}
+.btn{display:inline-block;margin-top:20px;background:#0f172a;color:white;padding:12px 22px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700}
+.btn2{display:inline-block;margin-top:10px;color:#64748b;text-decoration:none;font-size:12px}
+.foot{margin-top:18px;font-size:10px;color:#94a3b8;letter-spacing:0.5px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">🔒</div>
+  <h1>Formulario Cerrado</h1>
+  <span class="badge">FUERA DE HORARIO</span>
+  <div class="horario">
+    <b>⏰ Horario de apertura</b><br>
+    <span style="font-size:13px;color:#334155">Todos los domingos de <b>8:00 AM a 9:00 PM</b></span>
+  </div>
+  <div class="countdown">
+    <small>Próxima apertura</small>
+    <div id="prox">Calculando...</div>
+  </div>
+  <a class="btn" href="/">Volver al inicio</a><br>
+  <a class="btn2" href="/admin">Ver admin →</a>
+  <div class="foot">MIGR OCOSINGO - Sistema de Reportes</div>
+</div>
+<script>
+function proximoDomingo(){
+  const ahora = new Date();
+  let dias = (7 - ahora.getDay()) % 7;
+  if(dias===0 && ahora.getHours()>=21) dias=7;
+  if(dias===0 && ahora.getHours()<8) dias=0;
+  const prox = new Date();
+  prox.setDate(ahora.getDate()+dias);
+  prox.setHours(8,0,0,0);
+  return prox;
+}
+function actualizar(){
+  const prox = proximoDomingo();
+  const ahora = new Date();
+  const diff = prox - ahora;
+  if(diff<=0 && ahora.getDay()===0 && ahora.getHours()>=8 && ahora.getHours()<21){
+    document.getElementById('prox').innerHTML = "¡ABIERTO AHORA!";
+    return;
+  }
+  const d = Math.floor(diff/86400000);
+  const h = Math.floor((diff%86400000)/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
+  const fechaTxt = prox.toLocaleDateString('es-MX', opciones);
+  document.getElementById('prox').innerHTML = fechaTxt + "<br><span style='font-size:13px;color:#94a3b8;font-weight:400'>Faltan "+d+"d "+h+"h "+m+"m</span>";
+}
+actualizar();
+setInterval(actualizar, 60000);
+</script>
+</body>
+</html>

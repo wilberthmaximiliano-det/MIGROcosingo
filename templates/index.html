@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reporte de Vida Espiritual</title>
+<style>
+body{background:#eef0f8;margin:0;padding:20px;font-family:Arial,sans-serif}
+.wrap{max-width:850px;margin:0 auto}
+.logo{text-align:center;margin-bottom:15px}
+.logo img{width:110px;background:white;padding:8px;border-radius:8px}
+.card{background:white;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.08);overflow:hidden}
+.title{padding:20px 25px 15px;font-size:20px;font-weight:bold;color:#1e293b;border-bottom:1px solid #eef0f8;text-align:center}
+.content{padding:20px 25px}
+label{font-size:12px;color:#555;display:block;margin:18px 0 6px}
+label span{color:red}
+select, input, textarea{border:1px solid #cbd5e1;border-radius:6px;padding:10px;width:100%;box-sizing:border-box;font-size:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.table-wrap{overflow-x:auto;margin-top:15px;border:1px solid #e2e8f0;border-radius:6px}
+table{width:100%;border-collapse:collapse;min-width:700px;font-size:13px}
+th{background:#e2e8f0;padding:8px;color:#475569;font-weight:600;white-space:nowrap;text-align:center}
+td{border:1px solid #e2e8f0;padding:0}
+td:first-child{background:#f1f5f9;padding:8px 10px;font-weight:600;color:#334155;width:85px}
+td input{border:none;border-radius:0;text-align:center;padding:9px}
+textarea.big{height:110px;resize:vertical}
+.hint{font-size:11px;color:#64748b;margin-top:4px}
+.btn-wrap{text-align:center;padding:25px;border-top:1px solid #eef0f8}
+button{background:#22c55e;color:white;border:none;padding:11px 40px;border-radius:6px;font-size:15px;font-weight:bold;cursor:pointer}
+button:hover{background:#16a34a}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="logo"><img src="/static/logo.png"></div>
+<div class="card">
+<div class="title">Reporte de Vida Espiritual</div>
+<div class="content">
+<form method="POST">
+<label><span>*</span> Asignación</label>
+<select name="asignacion" required>
+<option value="">Seleccione</option>
+<option value="Discipulo">Discípulo</option>
+<option value="Lider">Líder</option>
+<option value="Diacono">Diácono</option>
+<option value="Anciano">Anciano</option>
+</select>
+
+<div class="row2">
+<div><label><span>*</span> Nombre</label><input type="text" name="nombre" required></div>
+<div><label><span>*</span> Apellido</label><input type="text" name="apellido" required></div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th></th>
+{% for f in fechas %}<th>{{f}}</th>{% endfor %}
+</tr>
+</thead>
+<tbody>
+<tr><td>Oración</td>{% for i in range(7) %}<td><input name="oracion_{{i}}"></td>{% endfor %}</tr>
+<tr><td>Ayuno</td>{% for i in range(7) %}<td><input name="ayuno_{{i}}"></td>{% endfor %}</tr>
+<tr><td>Lectura</td>{% for i in range(7) %}<td><input name="lectura_{{i}}"></td>{% endfor %}</tr>
+<tr><td>Visita</td>{% for i in range(7) %}<td><input name="visita_{{i}}"></td>{% endfor %}</tr>
+<tr><td>Diezmo</td>{% for i in range(7) %}<td><input name="diezmo_{{i}}"></td>{% endfor %}</tr>
+<tr><td>Ofrenda</td>{% for i in range(7) %}<td><input name="ofrenda_{{i}}"></td>{% endfor %}</tr>
+<tr><td>Prédica</td>{% for i in range(7) %}<td><input name="predica_{{i}}"></td>{% endfor %}</tr>
+<tr><td>Libro</td>{% for i in range(7) %}<td><input name="libro_{{i}}"></td>{% endfor %}</tr>
+</tbody>
+</table>
+</div>
+
+<label style="margin-top:25px">Prédica (Colocar nombre de la prédica y nombre del predicador)</label>
+<textarea name="detalle_predica" class="big"></textarea>
+
+<label>Libro (Colocar nombre del libro y nombre del autor)</label>
+<textarea name="detalle_libro" class="big"></textarea>
+
+</div>
+<div class="btn-wrap"><button type="submit">Enviar</button></div>
+</form>
+</div>
+</div>
+</body>
+</html>
