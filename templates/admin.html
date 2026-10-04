@@ -1,45 +1,53 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin MIGR Ocosingo</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>body{font-family:'Inter',system-ui,sans-serif}</style>
 </head>
 <body class="bg-[#eef2f7] min-h-screen">
-<header class="bg-[#151a32] text-white">
-  <div class="max-w-7xl mx-auto px-6 py-5 flex flex-wrap justify-between items-center gap-4">
+<header class="bg-[#151a32] text-white sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center flex-wrap gap-4">
     <div class="flex items-center gap-3">
-      <div class="w-11 h-11 bg-white rounded-xl flex items-center justify-center text-[#151a32] text-xl"><i class="fas fa-church"></i></div>
-      <h1 class="text-[22px] font-black leading-none">Admin MIGR<br>Ocosingo</h1>
-      <span class="ml-3 bg-[#22c55e] text-white px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2"><span class="w-6 h-6 bg-white/30 rounded-full flex items-center justify-center">✓</span> Sesión activa</span>
+      <div class="w-11 h-11 bg-white rounded-xl flex items-center justify-center text-[#151a32]"><i class="fas fa-church"></i></div>
+      <h1 class="text-xl font-black leading-none">Admin MIGR<br>Ocosingo</h1>
+      <span class="ml-3 bg-[#22c55e] px-4 py-1.5 rounded-full text-sm font-bold">✓ Sesión activa</span>
     </div>
-    <div class="flex gap-2 flex-wrap">
+    <div class="flex gap-2">
       <a href="/" class="bg-[#e5e7eb] text-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm">Inicio</a>
-      <a href="/dashboard" class="bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg"><i class="fas fa-chart-bar mr-2"></i>Dashboard</a>
-      <a href="/formulario" class="bg-[#e5e7eb] text-slate-600 px-5 py-2.5 rounded-xl font-bold text-sm">Probar formulario</a>
-      <a href="/logout" class="bg-[#ff8a8a] text-[#b91c1c] px-5 py-2.5 rounded-xl font-bold text-sm">Cerrar sesión</a>
+      <a href="/dashboard" class="bg-black text-white px-5 py-2.5 rounded-xl font-bold text-sm">Dashboard</a>
+      <a href="/logout" class="bg-[#ff8a8a] text-red-800 px-5 py-2.5 rounded-xl font-bold text-sm">Cerrar sesión</a>
     </div>
   </div>
 </header>
 
 <main class="max-w-7xl mx-auto p-6">
-  <div class="bg-white rounded-[20px] shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-8 flex flex-wrap justify-between items-center gap-6 border border-slate-100">
+  <div class="bg-white rounded-[20px] shadow-sm p-6 mb-6 border border-slate-100 flex justify-between items-center flex-wrap gap-4">
     <div>
-      <p class="text-slate-500 font-bold text-sm uppercase tracking-wide">Modo: Solo domingos 8am-9pm para usuarios | Admin siempre puede entrar</p>
-      <p class="mt-2 text-slate-800 font-bold">Total reportes: <span class="text-5xl font-black ml-2">{{ total }}</span></p>
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Sistema de reportes</p>
+      <p class="text-2xl font-black text-slate-900">Total reportes: <span class="text-[#22c55e]">{{ total if total is defined else reportes|length }}</span></p>
     </div>
-    <div class="flex gap-3">
-      <a href="/admin?vista=todos" class="bg-[#22c55e] hover:bg-[#16a34a] text-white px-8 py-4 rounded-2xl font-black text-lg flex items-center gap-3 shadow-lg shadow-green-200">
-        <i class="fas fa-th-large text-2xl"></i> TODOS<br>2 por hoja
-      </a>
+    <div class="flex gap-2">
+      <a href="/admin?filtro=todos" class="bg-[#22c55e] text-white px-6 py-3 rounded-xl font-black shadow-lg shadow-green-200 hover:bg-[#16a34a]"><i class="fas fa-layer-group mr-2"></i>TODOS</a>
+      <a href="/admin?por_hoja=2" class="bg-white border px-6 py-3 rounded-xl font-bold">2 por hoja</a>
     </div>
   </div>
 
-  <div class="mt-6 bg-white rounded-[20px] p-4 shadow-sm border">
-    <p class="text-center text-slate-400 py-10"><i class="fas fa-inbox text-3xl mb-2 block"></i> Aquí van tus reportes...<br>La tabla original de tu app.py se queda igual, solo cambia el header</p>
+  <div class="bg-white rounded-[20px] shadow-sm border overflow-hidden">
+    <div class="p-4 bg-slate-50 border-b font-bold text-slate-600 text-sm"><i class="fas fa-file-alt mr-2"></i>Reportes recibidos</div>
+    {% if reportes and reportes|length > 0 %}
+    <div class="divide-y">
+      {% for r in reportes %}
+      <div class="p-5 flex justify-between items-center hover:bg-slate-50">
+        <div><p class="font-bold text-slate-800">{{ r.nombre if r.nombre is defined else r }}</p><p class="text-xs text-slate-500">{{ r.fecha if r.fecha is defined else '' }} - {{ r.iglesia if r.iglesia is defined else '' }}</p></div>
+        <div class="flex gap-2"><a href="#" class="text-blue-600 font-bold text-sm hover:underline">Ver</a><a href="#" class="text-slate-400 font-bold text-sm">PDF</a></div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="p-16 text-center text-slate-400"><i class="fas fa-inbox text-5xl mb-4 block"></i><p class="font-bold">No hay reportes aún</p><p class="text-sm">Aparecerán aquí cuando los envíen por el link</p></div>
+    {% endif %}
   </div>
 </main>
 </body>
