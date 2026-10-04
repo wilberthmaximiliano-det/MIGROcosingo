@@ -287,18 +287,13 @@ def pdf_todos():
     c.save(); return send_file(path,as_attachment=False)
 
 @app.route("/admin")
-@login_required
 def admin():
-    datos=cargar()
-    semanas=collections.Counter([get_key_semana(r) for r in datos])
-    semanas_list=sorted(semanas, key=parse_fecha_key, reverse=True)
-    html=f"<html><head><meta name='viewport' content='width=device-width'><style>body{{font-family:Arial;padding:20px;background:#f8fafc}}.card{{background:white;padding:15px;border-radius:8px;margin-bottom:15px}}.btn{{display:inline-block;padding:8px 12px;border-radius:6px;text-decoration:none;font-size:13px;margin:3px}}.green{{background:#22c55e;color:white}}.blue{{background:#3b82f6;color:white}}.gray{{background:#e2e8f0;color:#334155}}.purple{{background:#0f172a;color:white}}.red{{background:#fee2e2;color:#dc2626}}</style></head><body><h2>Admin MIGR Ocosingo ✅ (Sesión iniciada)</h2><a class='btn gray' href='/'>Inicio</a> <a class='btn purple' href='/dashboard'>📊 Dashboard</a> <a class='btn gray' href='/formulario'>📝 Probar formulario (admin siempre abierto)</a> <a class='btn red' href='/admin/logout'>Cerrar sesión</a><div class='card'><b>Modo:</b> Solo domingos 8am-9pm para usuarios | Admin siempre puede entrar<br><b>Total reportes:</b> {len(datos)}<br><br><a class='btn green' href='/pdf_todos'>TODOS 2 por hoja</a></div>"
-    for sem in semanas_list:
-        html+=f"<div class='card'><b>{sem}</b> ({semanas[sem]})<br><br><a class='btn green' href='/pdf_todos?semana={sem}'>Todos esta semana</a><br><br>"
-        for asig in ORDEN_ASIGN:
-            cnt=len([r for r in datos if get_key_semana(r)==sem and r.get('asignacion','')==asig])
-            if cnt>0: html+=f"<a class='btn blue' href='/pdf_todos?semana={sem}&asign={asig}'>{asig} ({cnt})</a> "
-        html+="</div>"
-    html+="</body></html>"
-    return html
+    if not es_admin():
+        return redirect(url_for("admin_login"))
+    datos = cargar()
+    fechas = get_semana_vigente()
+    fechas_str = get_semana_str(fechas)
+    return render_template("admin.html", reportes=datos, fechas=fechas_str, is_admin=es_admin())
+
+
 if __name__=="__main__": app.run(debug=True)
