@@ -1,1 +1,58 @@
-<!DOCTYPE html><html><body style="font-family:Arial;padding:20px"><h2>Reportes recibidos</h2><table border="1" cellpadding="8" style="width:100%;border-collapse:collapse"><tr><th>ID</th><th>Fecha</th><th>Lider</th><th>Casa</th><th>PDF</th></tr>{% for r in reportes %}<tr><td>{{r.id}}</td><td>{{r.fecha_reporte}}</td><td>{{r.lider}}</td><td>{{r.casa}}</td><td><a href="/pdf/{{r.id}}" target="_blank">Ver</a></td></tr>{% endfor %}</table></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Reportes GAR</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#f1f5f9] min-h-screen font-sans">
+<!-- HEADER -->
+<header class="bg-[#0f172a] text-white sticky top-0 z-50 shadow-xl">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center"><i class="fas fa-shield-alt"></i></div>
+      <div><h1 class="font-black text-lg">Admin - Reportes</h1><p class="text-xs text-slate-400">Total: {{ total }} reportes</p></div>
+    </div>
+    <div class="flex gap-2">
+      <a href="/" class="bg-white text-slate-900 px-4 py-2 rounded-full text-sm font-bold hover:bg-slate-100"><i class="fas fa-home mr-1"></i> Volver a inicio</a>
+      <a href="/dashboard" class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-700"><i class="fas fa-chart-line mr-1"></i> Dashboard</a>
+      <a href="/logout" class="bg-red-500/20 text-red-300 border border-red-500/30 px-4 py-2 rounded-full text-sm font-bold hover:bg-red-500 hover:text-white">Salir</a>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-7xl mx-auto p-6">
+  <!-- FILTROS -->
+  <div class="bg-white rounded-2xl p-4 shadow-sm border mb-6 flex gap-3 items-center">
+    <span class="text-sm font-bold text-slate-600"><i class="fas fa-filter mr-1"></i> Vista:</span>
+    <a href="/admin?filtro=todos" class="px-4 py-2 bg-slate-900 text-white rounded-full text-sm font-bold">TODOS</a>
+    <a href="/admin?por_hoja=2" class="px-4 py-2 bg-white border rounded-full text-sm font-bold">2 por hoja</a>
+    <a href="/admin?estilo=centrado" class="px-4 py-2 bg-white border rounded-full text-sm font-bold">CENTRADO GRANDE</a>
+  </div>
+
+  <!-- TABLA -->
+  <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase font-bold">
+          <tr><th class="p-4 text-left">Fecha</th><th class="p-4 text-left">Iglesia / Reporte</th><th class="p-4 text-left">Acciones</th></tr>
+        </thead>
+        <tbody class="divide-y">
+          {% for r in reportes %}
+          <tr class="hover:bg-slate-50">
+            <td class="p-4 text-slate-600">{{ r.fecha if r.fecha else r['fecha'] }}</td>
+            <td class="p-4 font-medium">{{ r.iglesia if r.iglesia else r }}</td>
+            <td class="p-4"><a href="#" class="text-blue-600 font-bold hover:underline">Ver PDF</a></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="p-12 text-center text-slate-400"><i class="fas fa-inbox text-4xl mb-3 block"></i>No hay reportes aún<br><span class="text-xs">Cuando envíen el link aparecerán aquí</span></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
