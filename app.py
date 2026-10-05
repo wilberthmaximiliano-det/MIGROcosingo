@@ -15,7 +15,7 @@ ARCHIVO = "reportes.json"
 ORDEN_ASIGN = ["Lider","Anciano","Diacono","Discipulo"]
 
 def get_semana_vigente():
-    hoy = datetime.now(); lunes = hoy - timedelta(days=hoy.weekday()); return [lunes + timedelta(days=i) for i in range(7)]
+    hoy = datetime.now(ZoneInfo("America/Mexico_City")); lunes = hoy - timedelta(days=hoy.weekday()); return [lunes + timedelta(days=i) for i in range(7)]
 def get_semana_str(dt): return [d.strftime("%d/%m/%Y") for d in dt]
 def cargar():
     if not os.path.exists(ARCHIVO): return []
@@ -26,7 +26,7 @@ def guardar(d):
     with open(ARCHIVO, "w", encoding="utf-8") as f: json.dump(d, f, indent=2, ensure_ascii=False)
 def formulario_abierto():
     if MODO_PRUEBA: return True
-    ahora = datetime.now()
+    ahora = datetime.now(ZoneInfo("America/Mexico_City"))
     return ahora.weekday() == 6 and 8 <= ahora.hour < 21
 def es_admin():
     return session.get('is_admin') == True
@@ -118,7 +118,7 @@ def formulario():
     fechas_str=get_semana_str(get_semana_vigente())
     if request.method=="POST":
         datos=cargar()
-        nuevo={"id":str(uuid.uuid4())[:8],"creado":datetime.now().isoformat(),"semana":fechas_str}
+        nuevo={"id":str(uuid.uuid4())[:8],"creado":datetime.now(ZoneInfo("America/Mexico_City")).isoformat(),"semana":fechas_str}
         for k in request.form: nuevo[k]=request.form.get(k)
         datos.append(nuevo); guardar(datos)
         return redirect(f"/gracias/{nuevo['id']}")
@@ -190,7 +190,7 @@ def dashboard():
         else: est="Critico"; cls="crit"
         desempeno.append((p, perc, est, cls, cnt))
     desempeno.sort(key=lambda x: x[1], reverse=True)
-    hoy = datetime.now()
+    hoy = datetime.now(ZoneInfo("America/Mexico_City"))
     es_nuevo_dict = {}
     for p in personas:
         if fecha_primera[p] and (hoy - fecha_primera[p]).days <= 45:
