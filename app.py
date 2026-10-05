@@ -298,3 +298,11 @@ def admin():
 
 
 if __name__=="__main__": app.run(debug=True)
+
+@app.route('/logout')
+@app.route('/admin/logout')
+@app.route('/salir')
+def logout_fix():
+    from flask import session, redirect
+    session.clear()
+    return redirect('/')
